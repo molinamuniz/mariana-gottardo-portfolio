@@ -1,0 +1,15 @@
+# OS
+Thumbs.db
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+
+# Temp and logs
+*.log
+*.tmp
+
+# Python virtual environments (if created in this project)
+.venv/
+venv/
