@@ -25,7 +25,7 @@
     let swipeStartY = 0;
     const coverFrames = Array.from(document.querySelectorAll('.cover-frame'));
     let coverIndex = Math.max(coverFrames.findIndex((frame) => frame.classList.contains('active')), 0);
-    const mobileMediaQuery = window.matchMedia('(max-width: 980px)');
+    const mobileMediaQuery = window.matchMedia('(max-width: 980px), (hover: none) and (pointer: coarse)');
     const isMobileLayout = mobileMediaQuery.matches;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
