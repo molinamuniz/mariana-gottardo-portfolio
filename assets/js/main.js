@@ -4,6 +4,9 @@
     const prog = document.getElementById('prog');
     const brand = document.getElementById('brand');
     const count = document.getElementById('count');
+    const mobileTitle = document.getElementById('mobile-title');
+    const mobilePrev = document.getElementById('mobile-prev');
+    const mobileNext = document.getElementById('mobile-next');
     const lightbox = document.getElementById('lightbox');
     const lightboxBackdrop = document.getElementById('lightbox-backdrop');
     const lightboxClose = document.getElementById('lightbox-close');
@@ -22,10 +25,14 @@
     let swipeStartY = 0;
     const coverFrames = Array.from(document.querySelectorAll('.cover-frame'));
     let coverIndex = Math.max(coverFrames.findIndex((frame) => frame.classList.contains('active')), 0);
+    const mobileMediaQuery = window.matchMedia('(max-width: 980px)');
+    const isMobileLayout = mobileMediaQuery.matches;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!prefersReducedMotion) {
+    if (!prefersReducedMotion && !isMobileLayout) {
       document.body.classList.add('motion-ready');
+    } else {
+      document.body.classList.remove('motion-ready');
     }
 
     function setCoverFrame(index) {
@@ -53,14 +60,16 @@
       window.setInterval(rotateCoverFrame, coverSwapDelay);
     }
 
-    slides.forEach((slide, index) => {
-      const button = document.createElement('button');
-      button.className = index === 0 ? 'dot active' : 'dot';
-      button.dataset.i = index;
-      button.title = slide.dataset.title || `Slide ${index + 1}`;
-      button.setAttribute('aria-label', button.title);
-      dotsWrap.appendChild(button);
-    });
+    if (dotsWrap) {
+      slides.forEach((slide, index) => {
+        const button = document.createElement('button');
+        button.className = index === 0 ? 'dot active' : 'dot';
+        button.dataset.i = index;
+        button.title = slide.dataset.title || `Slide ${index + 1}`;
+        button.setAttribute('aria-label', button.title);
+        dotsWrap.appendChild(button);
+      });
+    }
 
     const dots = Array.from(document.querySelectorAll('.dot'));
 
@@ -73,11 +82,25 @@
     function updateUI(index) {
       current = index;
       const slide = slides[index];
+      const title = slide.dataset.title || `Slide ${index + 1}`;
       const isLight = slide.dataset.light === 'true';
       const progress = total > 1 ? (index / (total - 1)) * 100 : 0;
 
       prog.style.width = `${progress}%`;
       count.textContent = `${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+
+      if (mobileTitle) {
+        mobileTitle.textContent = title;
+      }
+
+      if (mobilePrev) {
+        mobilePrev.disabled = index === 0;
+      }
+
+      if (mobileNext) {
+        mobileNext.disabled = index === total - 1;
+      }
+
       brand.classList.toggle('on-light', isLight);
       count.classList.toggle('on-light', isLight);
 
@@ -85,6 +108,14 @@
         dot.classList.toggle('active', dotIndex === index);
         dot.classList.toggle('on-light', isLight);
       });
+    }
+
+    function goToSlide(index) {
+      if (index < 0 || index >= total) {
+        return;
+      }
+
+      slides[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function getLightboxGroup(sourceImage) {
@@ -206,6 +237,10 @@
       swipePointerId = null;
     }
 
+    const observerOptions = isMobileLayout
+      ? { threshold: 0.35, rootMargin: '-6% 0px -46% 0px' }
+      : { threshold: 0.6 };
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -217,16 +252,59 @@
           }
         });
       },
-      { threshold: 0.6 }
+      observerOptions
     );
 
     slides.forEach((slide) => observer.observe(slide));
 
+    let scrollSyncRaf = 0;
+
+    function syncCurrentSlideByScroll() {
+      if (scrollSyncRaf) {
+        return;
+      }
+
+      scrollSyncRaf = window.requestAnimationFrame(() => {
+        scrollSyncRaf = 0;
+
+        let closestIndex = current;
+        let closestDistance = Number.POSITIVE_INFINITY;
+        const topAnchor = isMobileLayout ? 72 : 0;
+
+        slides.forEach((slide, index) => {
+          const distance = Math.abs(slide.getBoundingClientRect().top - topAnchor);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestIndex = index;
+          }
+        });
+
+        if (closestIndex !== current) {
+          updateUI(closestIndex);
+        }
+      });
+    }
+
+    const scrollTarget = isMobileLayout ? window : scroller;
+    scrollTarget.addEventListener('scroll', syncCurrentSlideByScroll, { passive: true });
+
     dots.forEach((dot) => {
       dot.addEventListener('click', () => {
-        slides[Number(dot.dataset.i)].scrollIntoView({ behavior: 'smooth' });
+        goToSlide(Number(dot.dataset.i));
       });
     });
+
+    if (mobilePrev) {
+      mobilePrev.addEventListener('click', () => {
+        goToSlide(current - 1);
+      });
+    }
+
+    if (mobileNext) {
+      mobileNext.addEventListener('click', () => {
+        goToSlide(current + 1);
+      });
+    }
 
     lightboxBackdrop.addEventListener('click', closeLightbox);
     lightboxClose.addEventListener('click', closeLightbox);
@@ -272,14 +350,14 @@
       if (event.key === 'ArrowDown' || event.key === 'PageDown') {
         event.preventDefault();
         if (current < total - 1) {
-          slides[current + 1].scrollIntoView({ behavior: 'smooth' });
+          goToSlide(current + 1);
         }
       }
 
       if (event.key === 'ArrowUp' || event.key === 'PageUp') {
         event.preventDefault();
         if (current > 0) {
-          slides[current - 1].scrollIntoView({ behavior: 'smooth' });
+          goToSlide(current - 1);
         }
       }
     });
