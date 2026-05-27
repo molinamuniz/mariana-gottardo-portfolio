@@ -1092,6 +1092,30 @@
       to { transform: scale(1.1) translateY(-1.5%); }
     }
 
+    @media (min-width: 981px) and (hover: hover) and (pointer: fine) {
+      html {
+        zoom: 0.8;
+      }
+
+      #scroller {
+        min-height: 125vh;
+        min-height: 125svh;
+        min-height: 125dvh;
+        height: 125vh;
+        height: 125svh;
+        height: 125dvh;
+      }
+
+      .slide {
+        min-height: 125vh;
+        min-height: 125svh;
+        min-height: 125dvh;
+        height: 125vh;
+        height: 125svh;
+        height: 125dvh;
+      }
+    }
+
     /* ============================================================
        MOBILE — adaptação completa para telas touch / < 980px
        Filosofia:
