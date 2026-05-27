@@ -1,4 +1,4 @@
-﻿:root {
+:root {
       --paper: #f4efe5;
       --paper-soft: #efe6d8;
       --stone: #b0a090;
@@ -1092,9 +1092,21 @@
       to { transform: scale(1.1) translateY(-1.5%); }
     }
 
+    /* ============================================================
+       MOBILE — adaptação completa para telas touch / < 980px
+       Filosofia:
+         · Scroll natural do documento (sem snap)
+         · Imagens sangram até a borda (sem border-radius nos tiles)
+         · Preview cards das seções de projeto são ocultados
+           (as mesmas imagens aparecem nos feature slides seguintes)
+         · Contador (01/13) como pílula no canto superior direito
+         · Sem animações de entrada (gerenciado pelo JS via isMobileLayout)
+    ============================================================ */
     @media (max-width: 980px), (hover: none) and (pointer: coarse) {
+
+      /* ── BASE ────────────────────────────────────────────────── */
       html {
-        font-size: 14px;
+        font-size: 15px;
       }
 
       body {
@@ -1102,272 +1114,410 @@
         overflow-y: auto;
       }
 
+
+      /* ── UI OVERLAY ────────────────────────────────────────── */
       #ui {
         padding-top: env(safe-area-inset-top);
       }
 
       #prog {
-        height: 1px;
+        height: 2px;
       }
 
+      #brand,
+      .slide-no,
+      #dots,
+      #mobile-nav {
+        display: none !important;
+      }
+
+      /* Contador: pílula glassmorphism no canto superior direito */
+      #count {
+        top: calc(10px + env(safe-area-inset-top));
+        right: max(12px, env(safe-area-inset-right));
+        bottom: auto;
+        font-size: 0.55rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        padding: 5px 11px;
+        border-radius: 999px;
+        background: rgba(250, 248, 245, 0.78);
+        backdrop-filter: blur(10px);
+        color: rgba(28, 21, 16, 0.62);
+      }
+
+      #count.on-light {
+        color: rgba(28, 21, 16, 0.55);
+      }
+
+      /* ── SCROLLER: scroll natural do documento ──────────────── */
       #scroller {
-        min-height: 100svh;
-        min-height: 100dvh;
         height: auto;
+        min-height: unset;
         overflow: visible;
         scroll-snap-type: none;
         scroll-behavior: auto;
-        padding-bottom: calc(84px + env(safe-area-inset-bottom));
+        padding-bottom: env(safe-area-inset-bottom);
       }
 
+      /* ── SLIDES: fluem com o conteúdo ──────────────────────── */
       .slide {
-        min-height: auto;
         height: auto;
+        min-height: auto;
         scroll-snap-align: none;
         scroll-snap-stop: normal;
         overflow: visible;
       }
 
+      /* Capa permanece fullscreen */
       .slide--cover {
         min-height: 100svh;
         min-height: 100dvh;
       }
 
-      .cover-body,
-      .statement-shell,
-      .project-shell,
-      .feature-shell,
-      .academic-shell,
-      .closing-shell {
-        max-width: 560px;
-        margin-inline: auto;
-      }
-
-      .cover-body,
-      .statement-shell,
-      .project-shell,
-      .feature-shell,
-      .closing-shell {
-        padding: 32px 18px calc(112px + env(safe-area-inset-bottom));
-      }
-
-      .academic-shell {
-        grid-template-rows: auto auto;
-        padding: 32px 18px calc(112px + env(safe-area-inset-bottom));
-        gap: 20px;
-      }
-
+      /* ── CAPA ───────────────────────────────────────────────── */
       .cover-body {
         width: 100%;
+        padding: 0 22px calc(52px + env(safe-area-inset-bottom));
         justify-content: flex-end;
       }
 
-      .cover-kicker,
-      .cover-meta span,
-      .eyebrow,
-      .feature-kicker,
-      .feature-note,
-      .metric span,
-      .project-point span,
-      .closing-item span,
-      #brand,
-      #count,
-      .slide-no {
-        letter-spacing: 0.08em;
-      }
-
-      .cover-kicker,
-      .eyebrow,
-      .feature-kicker,
-      .feature-note,
-      .metric span,
-      .project-point span,
-      .closing-item span,
-      .academic-tag,
-      .academic-meta,
-      .academic-cta,
-      #brand,
-      #count,
-      .slide-no {
-        font-size: 0.6rem;
-      }
-
-      .cover-meta {
-        gap: 10px;
-      }
-
-      .cover-meta span {
-        font-size: 0.58rem;
-        padding: 8px 10px;
+      .cover-kicker {
+        font-size: 0.56rem;
+        letter-spacing: 0.22em;
+        margin-bottom: 12px;
       }
 
       .cover-title {
-        font-size: clamp(30px, 10.6vw, 42px);
-        line-height: 0.92;
+        font-size: clamp(50px, 15vw, 72px);
+        line-height: 0.88;
       }
 
-      .cover-lead,
-      .statement-copy p,
-      .project-copy p,
-      .feature-copy p,
-      .closing-shell p {
+      .cover-lead {
+        width: 100%;
+        margin-top: 16px;
         font-size: 0.82rem;
-        line-height: 1.56;
+        line-height: 1.62;
+      }
+
+      .cover-rule {
+        margin: 22px 0 18px;
+      }
+
+      .cover-meta {
+        gap: 8px;
+      }
+
+      .cover-meta span {
+        font-size: 0.52rem;
+        letter-spacing: 0.14em;
+        padding: 7px 12px;
+      }
+
+      /* ── APRESENTAÇÃO ───────────────────────────────────────── */
+      .statement-shell {
+        grid-template-columns: 1fr;
+        gap: 26px;
+        align-items: start;
+        padding: 52px 22px 56px;
+        height: auto;
+      }
+
+      .eyebrow {
+        font-size: 0.52rem;
+        letter-spacing: 0.22em;
+        margin-bottom: 10px;
       }
 
       .statement-copy h2,
       .project-copy h2,
       .closing-shell h2 {
-        font-size: clamp(26px, 9vw, 36px);
+        font-size: clamp(30px, 9vw, 44px);
+        line-height: 0.95;
       }
 
-      .feature-copy h3 {
-        font-size: clamp(21px, 7.2vw, 30px);
+      .statement-copy p {
+        width: 100%;
+        font-size: 0.82rem;
+        line-height: 1.62;
+        margin-top: 16px;
       }
 
-      .statement-shell,
-      .project-shell,
-      .feature-shell,
-      .closing-shell {
+      .statement-side {
+        padding: 20px;
+        border-radius: 16px;
+      }
+
+      .metric {
+        padding: 14px 0;
+      }
+
+      .metric span {
+        font-size: 0.5rem;
+        letter-spacing: 0.18em;
+        margin-bottom: 6px;
+      }
+
+      .metric strong {
+        font-size: clamp(19px, 5.5vw, 28px);
+      }
+
+      /* ── SEÇÕES DE PROJETO ──────────────────────────────────── */
+      /* Preview cards ocultadas: as mesmas imagens aparecem nos
+         feature slides logo abaixo */
+      .project-number {
+        display: none;
+      }
+
+      .project-preview {
+        display: none;
+      }
+
+      .project-shell {
         grid-template-columns: 1fr;
-        gap: 18px;
+        gap: 0;
+        align-items: start;
+        padding: 52px 22px 56px;
+        height: auto;
       }
 
-      .statement-side,
-      .closing-card,
-      .feature-copy {
-        max-width: none;
-        padding: 22px 18px;
-        border-radius: 20px;
+      .project-copy p {
+        width: 100%;
+        font-size: 0.82rem;
+        line-height: 1.62;
+        margin-top: 14px;
+      }
+
+      .project-points {
+        margin-top: 24px;
+        gap: 0;
+        width: 100%;
+      }
+
+      .project-point {
+        padding: 14px 0;
+      }
+
+      .project-point span {
+        font-size: 0.5rem;
+        letter-spacing: 0.18em;
+        margin-bottom: 5px;
       }
 
       .project-point strong {
-        font-size: 1.02rem;
+        font-size: 1.08rem;
+        line-height: 1.18;
       }
 
-      .feature-shell {
+      /* ── FEATURE SLIDES ─────────────────────────────────────── */
+      /* Imagens sangram ate a borda. Texto flui abaixo. */
+      .feature-shell,
+      .feature-shell--cnh {
+        grid-template-columns: 1fr;
         align-items: start;
+        gap: 0;
+        padding: 0;
+        height: auto;
       }
 
+      /* Diptico: duas imagens lado a lado, sangradas */
+      .feature-media-pair,
+      .feature-shell--cnh .feature-media-pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3px;
+        width: 100%;
+        justify-self: stretch;
+      }
+
+      .feature-media-tile {
+        aspect-ratio: 3 / 4;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .feature-media-tile::after {
+        display: none;
+      }
+
+      /* Imagem unica: faixa full-width */
       .feature-media {
         width: 100%;
-        height: auto;
-        aspect-ratio: 4 / 5;
-        border-radius: 24px;
+        height: 68vw;
+        min-height: 200px;
+        max-height: 340px;
+        border-radius: 0;
+        box-shadow: none;
+        align-self: auto;
+        justify-self: auto;
       }
 
       .feature-media--cnh {
-        justify-self: stretch;
-        width: 100%;
         height: auto;
+        max-height: none;
         aspect-ratio: 4 / 5;
       }
 
-      .feature-media-pair {
-        justify-self: stretch;
-        width: 100%;
-        gap: 12px;
+      .feature-media::after {
+        display: none;
       }
 
-      .feature-shell--cnh {
-        gap: 20px;
-      }
-
+      /* Painel de texto: limpo, sem vidro */
+      .feature-copy,
       .feature-shell--cnh .feature-copy {
         width: 100%;
         max-width: none;
+        padding: 24px 22px 48px;
+        border-radius: 0;
+        border: none;
+        border-top: 1px solid var(--line);
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+        align-self: auto;
+        justify-self: auto;
+      }
+
+      .feature-kicker {
+        font-size: 0.5rem;
+        letter-spacing: 0.18em;
+        margin-bottom: 10px;
+      }
+
+      .feature-copy h3 {
+        font-size: clamp(22px, 7vw, 30px);
+        line-height: 1.0;
+      }
+
+      .feature-copy p {
+        margin-top: 14px;
+        font-size: 0.82rem;
+        line-height: 1.62;
+      }
+
+      .feature-note {
+        margin-top: 16px;
+        font-size: 0.48rem;
+        letter-spacing: 0.18em;
+      }
+
+      /* ── TRABALHOS ACADEMICOS ───────────────────────────────── */
+      .academic-shell {
+        padding: 52px 22px 56px;
+        gap: 26px;
+        height: auto;
+        grid-template-rows: auto auto;
+      }
+
+      .academic-head h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 300;
+        font-size: clamp(28px, 8vw, 40px);
+        line-height: 0.95;
+        letter-spacing: -0.02em;
+      }
+
+      .academic-head p {
+        width: 100%;
+        font-size: 0.82rem;
+        line-height: 1.62;
+        margin-top: 14px;
       }
 
       .academic-grid {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 10px;
         overflow: visible;
       }
 
       .academic-card {
         min-height: auto;
-        padding: 18px;
-      }
-
-      .academic-card h3 {
-        font-size: 1.08rem;
+        padding: 16px 18px;
+        border-radius: 14px;
+        gap: 10px;
       }
 
       .academic-card::after {
         display: none;
       }
 
-      .academic-head p {
+      .academic-tag {
+        font-size: 0.48rem;
+        letter-spacing: 0.18em;
+        padding: 5px 9px;
+      }
+
+      .academic-card h3 {
+        font-size: 1.06rem;
+      }
+
+      .academic-meta {
+        font-size: 0.48rem;
+        letter-spacing: 0.16em;
+      }
+
+      .academic-card p {
+        font-size: 0.78rem;
+        line-height: 1.56;
+      }
+
+      .academic-cta {
+        font-size: 0.5rem;
+        letter-spacing: 0.16em;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      /* ── ENCERRAMENTO ───────────────────────────────────────── */
+      .closing-shell {
+        grid-template-columns: 1fr;
+        gap: 26px;
+        align-items: start;
+        padding: 52px 22px calc(60px + env(safe-area-inset-bottom));
+        height: auto;
+      }
+
+      .closing-shell p {
         margin-top: 16px;
+        font-size: 0.82rem;
+        line-height: 1.62;
       }
 
-      .feature-media-tile {
-        aspect-ratio: 3 / 4;
-        border-radius: 20px;
+      .closing-card {
+        padding: 22px 20px;
+        border-radius: 16px;
       }
 
-      .project-number {
-        display: none;
+      .closing-item + .closing-item {
+        margin-top: 18px;
+        padding-top: 18px;
       }
 
-      .project-preview {
-        min-height: auto;
-        display: grid;
-        gap: 14px;
+      .closing-item span {
+        font-size: 0.5rem;
+        letter-spacing: 0.18em;
+        margin-bottom: 6px;
       }
 
-      .preview-card,
-      .preview-card--main,
-      .preview-card--accent {
-        position: relative;
-        inset: auto;
-        width: 100%;
-        aspect-ratio: 5 / 4;
-        border-radius: 22px;
+      .closing-item strong {
+        font-size: clamp(18px, 5vw, 24px);
+        line-height: 1.1;
       }
 
-      #brand {
-        display: none;
-      }
-
-      #count {
-        top: calc(8px + env(safe-area-inset-top));
-        right: max(10px, env(safe-area-inset-right));
-        bottom: auto;
-        color: rgba(28, 21, 16, 0.62);
-        font-size: 0.56rem;
-        letter-spacing: 0.1em;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: rgba(250, 248, 245, 0.7);
-        backdrop-filter: blur(6px);
-      }
-
-      #count.on-light {
-        color: rgba(28, 21, 16, 0.52);
-      }
-
-      #dots,
-      .slide-no {
-        display: none;
-      }
-
-      #mobile-nav {
-        display: none !important;
-      }
-
+      /* ── LIGHTBOX ───────────────────────────────────────────── */
       #lightbox-toolbar {
-        padding: 12px 12px 0;
+        padding: 12px 14px 0;
         align-items: flex-start;
       }
 
       #lightbox-stage {
-        padding: 12px 12px 18px;
+        padding: 12px 14px 20px;
       }
 
       #lightbox-meta {
-        max-width: 60vw;
-        font-size: 0.54rem;
+        max-width: 58vw;
+        font-size: 0.52rem;
         letter-spacing: 0.06em;
         white-space: normal;
         line-height: 1.35;
@@ -1378,7 +1528,7 @@
         min-height: 44px;
         padding: 10px 14px;
         font-size: 0.56rem;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.1em;
       }
 
       .lightbox-nav {
@@ -1396,91 +1546,36 @@
       }
     }
 
+    /* ── TELAS PEQUENAS (telefones ate 640px) ─────────────────────── */
     @media (max-width: 640px) {
       html {
-        font-size: 13px;
+        font-size: 14px;
       }
 
-      .cover-body,
-      .statement-shell,
-      .project-shell,
-      .feature-shell,
-      .academic-shell,
-      .closing-shell {
-        padding: 26px 14px calc(104px + env(safe-area-inset-bottom));
+      .cover-body {
+        padding: 0 16px calc(44px + env(safe-area-inset-bottom));
       }
 
       .cover-title {
-        font-size: clamp(26px, 11vw, 34px);
+        font-size: clamp(44px, 14vw, 60px);
       }
 
-      .statement-copy h2,
-      .project-copy h2,
-      .closing-shell h2 {
-        font-size: clamp(22px, 9vw, 30px);
+      .statement-shell,
+      .project-shell,
+      .academic-shell {
+        padding-left: 16px;
+        padding-right: 16px;
       }
 
-      .feature-copy h3 {
-        font-size: clamp(18px, 7vw, 25px);
+      .closing-shell {
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-bottom: calc(52px + env(safe-area-inset-bottom));
       }
 
-      .cover-lead,
-      .statement-copy p,
-      .project-copy p,
-      .feature-copy p,
-      .closing-shell p,
-      .academic-card p {
-        font-size: 0.78rem;
-        line-height: 1.54;
-      }
-
-      .project-point strong {
-        font-size: 0.92rem;
-      }
-
-      #mobile-nav {
-        left: max(8px, env(safe-area-inset-left));
-        right: max(8px, env(safe-area-inset-right));
-        bottom: calc(6px + env(safe-area-inset-bottom));
-      }
-
-      #mobile-nav button {
-        padding: 0 10px;
-        font-size: 0.68rem;
-      }
-
-      #mobile-title {
-        max-width: 34vw;
-        font-size: 0.68rem;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .cover-meta {
-        gap: 8px;
-      }
-
-      .cover-meta span {
-        font-size: 0.54rem;
-        padding: 8px 11px;
-      }
-
-      .academic-card h3 {
-        font-size: 0.94rem;
-      }
-
-      #mobile-nav {
-        gap: 8px;
-        padding: 8px;
-      }
-
-      #mobile-nav button {
-        font-size: 0.64rem;
-      }
-
-      #mobile-title {
-        max-width: 32vw;
-        font-size: 0.64rem;
+      .feature-copy,
+      .feature-shell--cnh .feature-copy {
+        padding: 20px 16px 40px;
       }
     }
 
