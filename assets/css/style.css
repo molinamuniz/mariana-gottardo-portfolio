@@ -224,7 +224,8 @@
 
     .statement-copy h2,
     .project-copy h2,
-    .closing-shell h2 {
+    .closing-shell h2,
+    .contact-copy h2 {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 300;
       font-size: clamp(46px, 6vw, 92px);
@@ -236,7 +237,8 @@
     .statement-copy p,
     .project-copy p,
     .closing-shell p,
-    .feature-copy p {
+    .feature-copy p,
+    .contact-copy p {
       font-size: 0.98rem;
       line-height: 1.9;
     }
@@ -802,6 +804,135 @@
       color: var(--ink);
     }
 
+    .slide--contact {
+      background:
+        radial-gradient(circle at top left, rgba(122, 98, 72, 0.16), transparent 38%),
+        radial-gradient(circle at bottom right, rgba(176, 160, 144, 0.16), transparent 44%),
+        linear-gradient(180deg, #f6efe4 0%, #efe3d3 100%);
+      color: var(--ink);
+      display: grid;
+      align-items: center;
+    }
+
+    .contact-shell {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      width: min(1400px, 100%);
+      margin-inline: auto;
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 34px;
+      align-items: center;
+      padding: 78px 72px 72px;
+    }
+
+    .contact-copy p {
+      width: min(780px, 100%);
+      margin-top: 22px;
+      color: rgba(28, 21, 16, 0.74);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .contact-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 260px;
+      padding: 24px;
+      border: 1px solid rgba(28, 21, 16, 0.1);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.62);
+      box-shadow: 0 16px 36px rgba(28, 21, 16, 0.1);
+      color: inherit;
+      text-decoration: none;
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, background 0.28s ease;
+    }
+
+    .contact-card:visited {
+      color: inherit;
+    }
+
+    .contact-card:hover,
+    .contact-card:focus-visible {
+      transform: translateY(-4px);
+      border-color: rgba(28, 21, 16, 0.22);
+      box-shadow: 0 24px 44px rgba(28, 21, 16, 0.13);
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .contact-card:focus-visible {
+      outline: 2px solid rgba(122, 98, 72, 0.45);
+      outline-offset: 3px;
+    }
+
+    .contact-tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(28, 21, 16, 0.12);
+      background: rgba(255, 255, 255, 0.76);
+      font-size: 0.53rem;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(28, 21, 16, 0.42);
+    }
+
+    .contact-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(28px, 3.2vw, 42px);
+      line-height: 1.04;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-card p {
+      color: rgba(28, 21, 16, 0.72);
+      font-size: 0.88rem;
+      line-height: 1.64;
+    }
+
+    .contact-cta {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      font-size: 0.56rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(28, 21, 16, 0.58);
+      transition: color 0.25s ease;
+    }
+
+    .contact-cta::after {
+      content: " >";
+      margin-left: 0;
+      transition: margin-left 0.22s ease;
+    }
+
+    .contact-card:hover .contact-cta,
+    .contact-card:focus-visible .contact-cta {
+      color: rgba(28, 21, 16, 0.8);
+    }
+
+    .contact-card:hover .contact-cta::after,
+    .contact-card:focus-visible .contact-cta::after {
+      margin-left: 5px;
+    }
+
     #ui {
       position: fixed;
       inset: 0;
@@ -1077,7 +1208,9 @@
     body.motion-ready .academic-head,
     body.motion-ready .academic-grid,
     body.motion-ready .closing-shell > div,
-    body.motion-ready .closing-card {
+    body.motion-ready .closing-card,
+    body.motion-ready .contact-copy,
+    body.motion-ready .contact-grid {
       opacity: 0;
       transform: translateY(28px);
       filter: blur(2px);
@@ -1098,7 +1231,9 @@
     body.motion-ready .slide.is-visible .academic-head,
     body.motion-ready .slide.is-visible .academic-grid,
     body.motion-ready .slide.is-visible .closing-shell > div,
-    body.motion-ready .slide.is-visible .closing-card {
+    body.motion-ready .slide.is-visible .closing-card,
+    body.motion-ready .slide.is-visible .contact-copy,
+    body.motion-ready .slide.is-visible .contact-grid {
       opacity: 1;
       transform: none;
       filter: none;
@@ -1108,13 +1243,22 @@
     body.motion-ready .slide.is-visible .statement-side,
     body.motion-ready .slide.is-visible .feature-copy,
     body.motion-ready .slide.is-visible .academic-grid,
-    body.motion-ready .slide.is-visible .closing-card {
+    body.motion-ready .slide.is-visible .closing-card,
+    body.motion-ready .slide.is-visible .contact-grid {
       transition-delay: 120ms;
     }
 
     @media (max-width: 1280px) {
       .academic-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .contact-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .contact-grid > .contact-card:last-child {
+        grid-column: span 2;
       }
 
       .academic-grid > .academic-card,
@@ -1305,7 +1449,8 @@
 
       .statement-copy h2,
       .project-copy h2,
-      .closing-shell h2 {
+      .closing-shell h2,
+      .contact-copy h2 {
         font-size: clamp(30px, 9vw, 44px);
         line-height: 0.95;
       }
@@ -1558,6 +1703,62 @@
         line-height: 1.62;
       }
 
+      /* ── CONTATOS ──────────────────────────────────────────── */
+      .contact-shell {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        align-items: start;
+        padding: 52px 22px calc(60px + env(safe-area-inset-bottom));
+        height: auto;
+      }
+
+      .contact-copy p {
+        margin-top: 16px;
+        width: 100%;
+        font-size: 0.82rem;
+        line-height: 1.62;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .contact-grid > .contact-card:last-child {
+        grid-column: auto;
+      }
+
+      .contact-card {
+        min-height: auto;
+        padding: 16px 18px;
+        border-radius: 14px;
+        gap: 10px;
+      }
+
+      .contact-tag {
+        font-size: 0.48rem;
+        letter-spacing: 0.18em;
+        padding: 5px 9px;
+      }
+
+      .contact-card h3 {
+        font-size: 1.06rem;
+        line-height: 1.16;
+      }
+
+      .contact-card p {
+        font-size: 0.78rem;
+        line-height: 1.56;
+      }
+
+      .contact-cta {
+        font-size: 0.5rem;
+        letter-spacing: 0.16em;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+      }
+
       .closing-card {
         padding: 22px 20px;
         border-radius: 16px;
@@ -1636,7 +1837,8 @@
 
       .statement-shell,
       .project-shell,
-      .academic-shell {
+      .academic-shell,
+      .contact-shell {
         padding-left: 16px;
         padding-right: 16px;
       }
