@@ -586,11 +586,23 @@
 
     .academic-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 16px;
       align-content: start;
       overflow: visible;
       padding-right: 0;
+    }
+
+    .academic-grid > .academic-card {
+      grid-column: span 2;
+    }
+
+    .academic-grid > .academic-card:nth-last-child(2):nth-child(3n + 1) {
+      grid-column: 2 / span 2;
+    }
+
+    .academic-grid > .academic-card:last-child:nth-child(3n + 2) {
+      grid-column: 4 / span 2;
     }
 
     .academic-card {
@@ -1103,6 +1115,12 @@
     @media (max-width: 1280px) {
       .academic-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .academic-grid > .academic-card,
+      .academic-grid > .academic-card:nth-last-child(2):nth-child(3n + 1),
+      .academic-grid > .academic-card:last-child:nth-child(3n + 2) {
+        grid-column: auto;
       }
     }
 
