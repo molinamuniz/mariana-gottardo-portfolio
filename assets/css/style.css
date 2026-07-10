@@ -893,36 +893,6 @@
       margin-left: 5px;
     }
 
-    .academic-card--unavailable {
-      border-style: dashed;
-      border-color: rgba(28, 21, 16, 0.14);
-      box-shadow: none;
-      cursor: not-allowed;
-      background: rgba(28, 21, 16, 0.015);
-    }
-
-    .academic-card--unavailable:hover,
-    .academic-card--unavailable:focus-visible {
-      transform: none;
-      border-color: rgba(28, 21, 16, 0.14);
-      box-shadow: none;
-      outline: none;
-    }
-
-    .academic-card--unavailable::after {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      background: rgba(122, 98, 72, 0.88);
-    }
-
-    .academic-card--unavailable .academic-cta {
-      color: rgba(28, 21, 16, 0.44);
-    }
-
-    .academic-card--unavailable .academic-cta::after {
-      content: "";
-    }
-
     .slide--closing {
       background:
         radial-gradient(circle at top right, rgba(122, 98, 72, 0.15), transparent 36%),
